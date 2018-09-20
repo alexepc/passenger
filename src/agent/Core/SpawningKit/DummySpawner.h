@@ -89,7 +89,7 @@ public:
 
 		result.initialize(*context, &config);
 		result.pid = number;
-		result.dummy = true;
+		result.type = Result::DUMMY;
 		result.gupid = "gupid-" + toString(number);
 		result.spawnEndTime = result.spawnStartTime;
 		result.spawnEndTimeMonotonic = result.spawnStartTimeMonotonic;

@@ -112,7 +112,8 @@ namespace tut {
 			Options options;
 			options.spawnMethod = "dummy";
 			options.appRoot = "stub/rack";
-			options.startCommand = "ruby start.rb";
+			options.appType = "ruby";
+			options.appStartCommand = "ruby start.rb";
 			options.startupFile  = "start.rb";
 			options.loadShellEnvvars = false;
 			options.user = testConfig["normal_user_1"].asCString();

@@ -77,22 +77,23 @@ namespace tut {
 
 		SpawningKit::AppPoolOptions createOptions() {
 			SpawningKit::AppPoolOptions options;
+			options.appType     = "directly-through-start-command";
 			options.spawnMethod = "smart";
 			options.loadShellEnvvars = false;
 			return options;
 		}
 	};
 
-	DEFINE_TEST_GROUP_WITH_LIMIT(Core_SpawningKit_SmartSpawnerTest, 90);
+	DEFINE_TEST_GROUP(Core_SpawningKit_SmartSpawnerTest);
 
 	#include "SpawnerTestCases.cpp"
 
-	TEST_METHOD(80) {
+	TEST_METHOD(10) {
 		set_test_name("If the preloader has crashed then SmartSpawner will "
 			"restart it and try again");
 		SpawningKit::AppPoolOptions options = createOptions();
 		options.appRoot      = "stub/rack";
-		options.startCommand = "ruby start.rb";
+		options.appStartCommand = "ruby start.rb";
 		options.startupFile  = "start.rb";
 		boost::shared_ptr<SmartSpawner> spawner = createSpawner(options);
 
@@ -112,12 +113,12 @@ namespace tut {
 		spawner->spawn(options);
 	}
 
-	TEST_METHOD(81) {
+	TEST_METHOD(11) {
 		set_test_name("If the preloader still crashes after the restart then "
 			"SmartSpawner will throw an exception");
 		SpawningKit::AppPoolOptions options = createOptions();
 		options.appRoot      = "stub/rack";
-		options.startCommand = "ruby start.rb";
+		options.appStartCommand = "ruby start.rb";
 		options.startupFile  = "start.rb";
 
 		if (defaultLogLevel == (LoggingKit::Level) DEFAULT_LOG_LEVEL) {
@@ -135,14 +136,14 @@ namespace tut {
 		}
 	}
 
-	TEST_METHOD(82) {
+	TEST_METHOD(12) {
 		set_test_name("If the preloader didn't start within the timeout"
 			" then it's killed and an exception is thrown, which"
 			" contains whatever it printed to stdout and stderr");
 
 		SpawningKit::AppPoolOptions options = createOptions();
 		options.appRoot      = "stub/rack";
-		options.startCommand = "ruby start.rb";
+		options.appStartCommand = "ruby start.rb";
 		options.startupFile  = "start.rb";
 		options.startTimeout = 100;
 
@@ -183,14 +184,14 @@ namespace tut {
 		}
 	}
 
-	TEST_METHOD(83) {
+	TEST_METHOD(13) {
 		set_test_name("If the preloader crashed during startup,"
 			" then the resulting exception contains the stdout"
 			" and stderr output");
 
 		SpawningKit::AppPoolOptions options = createOptions();
 		options.appRoot      = "stub/rack";
-		options.startCommand = "ruby start.rb";
+		options.appStartCommand = "ruby start.rb";
 		options.startupFile  = "start.rb";
 
 		vector<string> preloaderCommand;
@@ -214,7 +215,7 @@ namespace tut {
 		}
 	}
 
-	TEST_METHOD(84) {
+	TEST_METHOD(14) {
 		set_test_name("If the preloader encountered an error,"
 			" then the resulting exception"
 			" takes note of the process's environment variables");
@@ -223,7 +224,7 @@ namespace tut {
 			sizeof("PASSENGER_FOO\0foo\0") - 1);
 		SpawningKit::AppPoolOptions options = createOptions();
 		options.appRoot      = "stub/rack";
-		options.startCommand = "ruby start.rb";
+		options.appStartCommand = "ruby start.rb";
 		options.startupFile  = "start.rb";
 		options.environmentVariables = envvars;
 
